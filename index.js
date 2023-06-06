@@ -29,19 +29,27 @@ app.get('/api/hello', function(req, res) {
 
 app.post('/api/shorturl', (req, res) => {
 
-  let url
+  let url;
+  // ERRORS
+
+  // Valid URL
   try {
     url = new URL(req.body.url);
   } catch {
     return res.json({ error:"Invalid URL" });
   }
-  // if (url) console.log(url)
-  
+
+  // different from https or http => ERROR
+  let badUrl = req.body.url.split(':', 1)
+  if (badUrl != 'https' && badUrl != 'http') return res.json({ error:"Invalid URL" });
+
+  console.log('hi')
+  // RETRIEVE URL SHORT
   if (urlArray.includes(url)) {
     let shortUrlIndex = urlArray.indexOf(url);
     return res.json({ original_url: url, short_url: shortUrlIndex + 1 });
   }
-  else
+  else // GENERATE AND SAVE URL SHORT
   {
     let shortUrl = urlArray.push(url);
     return res.json({ original_url: url, short_url: shortUrl });
@@ -51,7 +59,6 @@ app.post('/api/shorturl', (req, res) => {
 app.get('/api/shorturl/:shorturl', (req, res) => {
   let shUrl = req.params.shorturl;
 
-  console.log(urlArray[shUrl - 1])
   // ERRORs
   if (isNaN(shUrl)) return res.json({ error: 'Wrong format' });
   if (shUrl <= 0)  return res.json({ error: 'Wrong format' });
