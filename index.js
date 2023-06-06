@@ -28,7 +28,15 @@ app.get('/api/hello', function(req, res) {
 });
 
 app.post('/api/shorturl', (req, res) => {
-  let url = req.body.url
+
+  let url
+  try {
+    url = new URL(req.body.url);
+  } catch {
+    return res.json({ error:"Invalid URL" });
+  }
+  // if (url) console.log(url)
+  
   if (urlArray.includes(url)) {
     let shortUrlIndex = urlArray.indexOf(url);
     return res.json({ original_url: url, short_url: shortUrlIndex + 1 });
