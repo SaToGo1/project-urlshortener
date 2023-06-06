@@ -40,6 +40,15 @@ app.post('/api/shorturl', (req, res) => {
   }
 });
 
+app.get('/api/shorturl/:shorturl', (req, res) => {
+  let shUrl = req.params.shorturl;
+  
+  // short url equals to index + 1.
+  // so index = shortUrl - 1.
+  let url = urlArray[shUrl - 1];
+  res.redirect(url);
+})
+
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
