@@ -42,7 +42,14 @@ app.post('/api/shorturl', (req, res) => {
 
 app.get('/api/shorturl/:shorturl', (req, res) => {
   let shUrl = req.params.shorturl;
-  
+
+  console.log(urlArray[shUrl - 1])
+  // ERRORs
+  if (isNaN(shUrl)) return res.json({ error: 'Wrong format' });
+  if (shUrl <= 0)  return res.json({ error: 'Wrong format' });
+  if (shUrl > 0 && urlArray[shUrl - 1] === undefined)
+    return res.json({ error: "No short URL found for the given input" });
+    
   // short url equals to index + 1.
   // so index = shortUrl - 1.
   let url = urlArray[shUrl - 1];
